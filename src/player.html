@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Coin Flipping Game</title>
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div id="content">
+        <h1 id="title">Coin Flipping!</h1>
+        <div style="margin: 8px;">
+
+            <div style="margin: 8px;">
+                <strong><span id="username">username</span></strong>
+                <span>, Welcome Back! </span>
+            </div>
+
+            <div style="margin: 8px;">
+                <span>Your Current Balance: </span>
+                <strong><span id="balance">balance</span></strong>
+            </div>
+        </div>
+
+        <div style="margin: 8px;">
+            <h2>BALANCE MANAGER</h2>
+            <div style="margin: 8px;">
+                <div id="deposit", style="margin: 8px;">
+                    <input type="text", id="depositNum">
+                    <span> eth</span>
+                    <button id="depositBtn"> Deposit</button>
+                </div>
+
+                <div id="withdraw", style="margin: 8px;">
+                    <input type="text", id="withdrawNum">
+                    <span> eth</span>
+                    <button id="withdrawBtn"> Withdraw</button>
+                </div>
+            </div>
+
+            <div style="margin: 8px;">
+                <div id="transferByName" style="margin: 6px;">
+                    <div>
+                        <span>Transfer Using Name</span>
+                        <button id="transferBtn1">Transfer</button>
+                    </div>
+                    <div style="margin: 4px;">
+                        <span>Amount: </span>
+                        <input type="text" id="transferNum1">
+                        <span> eth</span>
+                    </div>
+                    <div style="margin: 4px;">
+                        <span>User:&nbsp&nbsp&nbsp&nbsp&nbsp </span>
+                        <input type="text" id="toName">
+                    </div>
+                </div>
+
+                <div id="transferByAddress" style="margin: 6px;">
+                    <div>
+                        <span>Transfer Using Address</span>
+                        <button id="transferBtn2">Transfer</button>
+                    </div>
+                    <div style="margin: 4px;">
+                        <span>Amount:&nbsp </span>
+                        <input type="text" id="transferNum2">
+                        <span> eth</span>
+                    </div>
+                    <div style="margin: 4px;">
+                        <span>Address: </span>
+                        <input type="text" id="toAddress">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin: 8px;">
+            <div style="margin: 8px;">
+                <h2>GAME</h2>
+                <div>
+                    <button id="joinGame">JOIN GAME</button>
+                    <button id="getNumber">GET NUMBER</button>
+                </div>
+
+                <div>
+                    <span id='joinState'>Success! You joined the game!</span>
+                </div>
+
+                <div>
+                    <span>Time Limit: </span>
+                    <strong><span id='timeLimit'>59</span></strong>
+                    <span> senconds!</span>
+                </div>
+            </div>
+
+            <div style="margin: 8px;">
+                <div style="margin: 8px;">
+                    <input type="text", id="hashValue">
+                    <button id="sendHash"> Send Hash</button>
+                </div>
+
+                <div style="margin: 8px;">
+                    <input type="text", id="numValue">
+                    <button id="sendNumber"> Send Number</button>
+                </div>
+            </div>
+
+            <div style="margin: 8px;">
+                <button id="checkWinner"> Check Winner</button>
+                <strong><span id="winner"> You Won/Lose! </span></strong>
+            </div>
+        </div>
+
+        <div style="margin: 8px;">
+            <div style="margin: 8px;">
+                <h2>Check</h2>
+                <button id="checkTransferHistory">Check Transfer History</button>
+                <table id="transferHistory", border="1">
+                    <tr>
+                        <th>To</th>
+                        <th>Amount</th>
+                    </tr>
+                </table>
+            </div>
+
+            <div style="margin: 8px;">
+                <button id="playerCheckGameHistory">Check Game History</button>
+                <table id="gameHistory" border="1">
+                    <tr>
+                        <th>game ID</th>
+                        <th>player 1</th>
+                        <th>player 2</th>
+                        <th>start time</th>
+                        <th>end time</th>
+                        <th>winner</th>
+                    </tr>
+                    <tr>
+                        <td>cell 1</td>
+                        <td>cell 2</td>
+                        <td>cell 3</td>
+                        <td>cell 4</td>
+                        <td>cell 5</td>
+                        <td>cell 6</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/web3.min.js"></script>
+    <script src="js/truffle-contract.js"></script>
+    <script src="js/player.js"></script>
+</body>
+</html>
