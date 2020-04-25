@@ -14,27 +14,28 @@
         <div style="margin: 8px;">
 
             <div style="margin: 8px;">
-                <strong><span id="username">username</span></strong>
+                <strong><span id="username"></span></strong>
                 <span>, Welcome Back! </span>
             </div>
 
             <div style="margin: 8px;">
                 <span>Your Current Balance: </span>
-                <strong><span id="balance">balance</span></strong>
+                <strong><span id="balance">0</span></strong>
+                <span> eth</span>
             </div>
         </div>
 
         <div style="margin: 8px;">
             <h2>BALANCE MANAGER</h2>
             <div style="margin: 8px;">
-                <div id="deposit", style="margin: 8px;">
-                    <input type="text", id="depositNum">
+                <div id="deposit" style="margin: 8px;">
+                    <input type="text" id="depositNum" value="0">
                     <span> eth</span>
                     <button id="depositBtn"> Deposit</button>
                 </div>
 
-                <div id="withdraw", style="margin: 8px;">
-                    <input type="text", id="withdrawNum">
+                <div id="withdraw" style="margin: 8px;">
+                    <input type="text" id="withdrawNum" value="0">
                     <span> eth</span>
                     <button id="withdrawBtn"> Withdraw</button>
                 </div>
@@ -48,7 +49,7 @@
                     </div>
                     <div style="margin: 4px;">
                         <span>Amount: </span>
-                        <input type="text" id="transferNum1">
+                        <input type="text" id="transferNum1" value="0">
                         <span> eth</span>
                     </div>
                     <div style="margin: 4px;">
@@ -64,7 +65,7 @@
                     </div>
                     <div style="margin: 4px;">
                         <span>Amount:&nbsp </span>
-                        <input type="text" id="transferNum2">
+                        <input type="text" id="transferNum2" value="0">
                         <span> eth</span>
                     </div>
                     <div style="margin: 4px;">
@@ -78,20 +79,34 @@
         <div style="margin: 8px;">
             <div style="margin: 8px;">
                 <h2>GAME</h2>
-                <div>
+                <div style="margin: 8px;">
                     <button id="joinGame">JOIN GAME</button>
-                    <button id="getNumber">GET NUMBER</button>
+                    <span id='joinState'>Join State</span>
                 </div>
 
-                <div>
-                    <span id='joinState'>Success! You joined the game!</span>
+                <div style="margin: 8px;">
+                    <div>
+                        <span>You must send the hash of your number </span>
+                        <strong><span>in</span></strong>
+                        <span> 1 minute,</span>
+                    </div>
+                    <div>
+                        <span>and send the corresponding number </span>
+                        <strong><span>after</span></strong>
+                        <span> 1 minute.</span>
+                    </div>
+                    <div>
+                        <span>Warning: If you do</span>
+                        <strong><span> not </span></strong>
+                        <span>send the corresponding number, you will </span>
+                        <strong><span>not</span></strong>
+                        <span> get your bet back.</span>
+                    </div>
                 </div>
+            </div>
 
-                <div>
-                    <span>Time Limit: </span>
-                    <strong><span id='timeLimit'>59</span></strong>
-                    <span> senconds!</span>
-                </div>
+            <div style="margin: 8px;">
+                <button id="getNumber">GET NUMBER</button>
             </div>
 
             <div style="margin: 8px;">
@@ -114,7 +129,7 @@
 
         <div style="margin: 8px;">
             <div style="margin: 8px;">
-                <h2>Check</h2>
+                <h2>CHECK</h2>
                 <button id="checkTransferHistory">Check Transfer History</button>
                 <table id="transferHistory", border="1">
                     <tr>
@@ -136,12 +151,12 @@
                         <th>winner</th>
                     </tr>
                     <tr>
-                        <td>cell 1</td>
-                        <td>cell 2</td>
-                        <td>cell 3</td>
-                        <td>cell 4</td>
-                        <td>cell 5</td>
-                        <td>cell 6</td>
+                        <td id="gameID"></td>
+                        <td id="player1"></td>
+                        <td id="player2"></td>
+                        <td id="startTime"></td>
+                        <td id="endTime"></td>
+                        <td id="winner2"></td>
                     </tr>
                 </table>
             </div>

@@ -62,10 +62,10 @@ App = {
                 return coinFlippingInstance.whoAmI.call({from: account});
             }).then(function (result) {
                 var resultNum = result.c[0];
-                if(resultNum == 0){
+                if(resultNum === 0){
                     window.location.href = "index.html";
                 }
-                else if(resultNum == 2){
+                else if(resultNum === 2){
                     window.location.href = "banker.html";
                 }
                 else{
@@ -110,14 +110,14 @@ App = {
             var account = accounts[0];
             App.contracts.CoinFlipping.deployed().then(function(instance) {
                 coinFlippingInstance = instance;
-                return coinFlippingInstance.deposit({from: account, value: amount, gas: 30000000});
+                return coinFlippingInstance.deposit({from: account, value: amount});
             }).then(function() {
                 alert('Deposit Successful!');
                 return coinFlippingInstance.query.call({from: account});
             }).then(function (result) {
                 var balance = ((result[1].c[0] * 1e14 + result[1].c[0]) / App.oneEther).toFixed(2);
                 $("#balance").text(balance);
-                $('#depositNum').attr("value", "");
+                $("#depositNum").val(0);
             }).catch(function (err) {
                 console.log(err.message);
             });
@@ -137,14 +137,15 @@ App = {
             var account = accounts[0];
             App.contracts.CoinFlipping.deployed().then(function(instance) {
                 coinFlippingInstance = instance;
-                return coinFlippingInstance.withdraw(amount, {from: account, gas: 30000000});
+                console.log(amount);
+                return coinFlippingInstance.withdraw(amount, {from: account});
             }).then(function(result) {
                 alert('Withdraw Successful!');
                 return coinFlippingInstance.query.call({from: account});
             }).then(function (result) {
                 var balance = ((result[1].c[0] * 1e14 + result[1].c[0]) / App.oneEther).toFixed(2);
                 $("#balance").text(balance);
-                $('#withdrawNum').attr("value", "");
+                $("#withdrawNum").val(0);
             }).catch(function (err) {
                 console.log(err.message);
             });
@@ -173,7 +174,8 @@ App = {
             }).then(function (result) {
                 var balance = ((result[1].c[0] * 1e14 + result[1].c[0]) / App.oneEther).toFixed(2);
                 $("#balance").text(balance);
-                $('#withdrawNum').attr("value", "");
+                $("#transferNum1").val(0);
+                $("#toName").val("");
             }).catch(function (err) {
                 console.log(err.message);
             });
@@ -202,7 +204,8 @@ App = {
             }).then(function (result) {
                 var balance = ((result[1].c[0] * 1e14 + result[1].c[0]) / App.oneEther).toFixed(2);
                 $("#balance").text(balance);
-                $('#withdrawNum').attr("value", "");
+                $("#transferNum2").val(0);
+                $("#toAddress").val("");
             }).catch(function (err) {
                 console.log(err.message);
             });
@@ -224,12 +227,11 @@ App = {
                 coinFlippingInstance = instance;
                 return coinFlippingInstance.joinGame({from: account});
             }).then(function (result) {
-                alert("Join Successful!");
+                $("#joinState").text("Success! You joined the game!")
                 return coinFlippingInstance.query.call({from: account});
             }).then(function (result) {
                 var balance = ((result[1].c[0] * 1e14 + result[1].c[0]) / App.oneEther).toFixed(2);
                 $("#balance").text(balance);
-                $('#withdrawNum').attr("value", "");
             }).catch(function (err) {
                 console.log(err.message);
             });
@@ -237,7 +239,18 @@ App = {
     },
 
     getNumber: function () {
+        var numValue;
+        var hashValue;
+        var pad;
+        var encodedNum;
 
+        numValue = Math.round(Math.random() * 1e16);
+        pad = '0'.repeat(66 - web3.toHex(numValue).length);
+        encodedNum = "0x" + pad + web3.toHex(numValue).slice(2);
+        hashValue = web3.sha3(encodedNum, {encoding: 'hex'});
+
+        $("#numValue").val(numValue);
+        $("#hashValue").val(hashValue);
     },
 
     sendHash: function (event) {
@@ -302,13 +315,13 @@ App = {
 
             App.contracts.CoinFlipping.deployed().then(function (instance) {
                 coinFlippingInstance = instance;
-                return coinFlippingInstance.checkWinner({from: account});
-            }).then(function (winner) {
-                if(winner === $("#username").val()){
+                return coinFlippingInstance.playerGetWinner.call({from: account});
+            }).then(function (win) {
+                if(win){
                     $("#winner").text("YOU WIN!");
                 }
                 else{
-                    $("#winner").text("YOU LOSS!");
+                    $("#winner").text("YOU LOSE!");
                 }
             }).catch(function (err) {
                 console.log(err.message);
@@ -316,12 +329,57 @@ App = {
         });
     },
 
-    checkTransferHistory: function () {
+    checkTransferHistory: function (event) {
+        event.preventDefault();
 
+        var coinFlippingInstance;
+
+        web3.eth.getAccounts(function (error, accounts) {
+            if(error){
+                console.log(error);
+            }
+
+            var account = accounts[0];
+
+            App.contracts.CoinFlipping.deployed().then(function (instance) {
+                coinFlippingInstance = instance;
+                return coinFlippingInstance.checkRecords({from: account});
+            }).then(function (result) {
+                console.log(result);
+            }).catch(function (err) {
+                console.log(err.message);
+            });
+        });
     },
 
-    playerCheckGameHistory: function () {
+    playerCheckGameHistory: function (event) {
+        event.preventDefault();
 
+        var coinFlippingInstance;
+
+        web3.eth.getAccounts(function (error, accounts) {
+            if(error){
+                console.log(error);
+            }
+
+            var account = accounts[0];
+
+            App.contracts.CoinFlipping.deployed().then(function (instance) {
+                coinFlippingInstance = instance;
+                return coinFlippingInstance.playerCheckHistory.call({from: account});
+            }).then(function (result) {
+                $("#gameID").text(result[0].c[0]);
+                $("#player1").text(result[1]);
+                $("#player2").text(result[2]);
+                var startTime = new Date(result[3].c[0] * 1000);
+                var endTime = new Date(result[4].c[0] * 1000);
+                $("#startTime").text(startTime);
+                $("#endTime").text(endTime);
+                $("#winner2").text(result[5]);
+            }).catch(function (err) {
+                console.log(err.message);
+            });
+        });
     }
 
 };

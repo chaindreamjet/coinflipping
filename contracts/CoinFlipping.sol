@@ -15,7 +15,7 @@ contract CoinFlipping is AccountsManager{
         // current game state
         uint ongoing; // 0 for not start yet, 1 for ongoing, 2 for already ended
         uint currentPlayers; // no. of current players
-        uint bet; // bet value, 1 eth by defa   ult
+        uint bet; // bet value, 1 eth by default
         uint due; // time limit
         uint gameBalance;
         uint start_time;
@@ -27,8 +27,10 @@ contract CoinFlipping is AccountsManager{
     struct GameHistory{
         // game states to store in history
         uint gameID;
-        address payable [2] players;
-        string [2] playerNames;
+        address payable player1;
+        address payable player2;
+        string playerName1;
+        string playerName2;
         uint start_time;
         uint end_time;
         address payable winnerAddr;
@@ -53,17 +55,14 @@ contract CoinFlipping is AccountsManager{
     address payable [] honestPlayers;
     
     
-    /*** event ***/
-    event Logger2(GameHistory [] gameHistory);
-    
     /*** constructor ***/
     constructor() public{
         // initialize game, banker
-        currentGameID = 0;
+        currentGameID = 1;
         clearGame();
 
         banker = Banker({
-            bankerAddr: 0xe29dEc2ffCf4d0A61ED9983ED5369E0EeB4A4708, // todo
+            bankerAddr: 0xe29dEc2ffCf4d0A61ED9983ED5369E0EeB4A4708, // the last address offered by Ganache
             bankerName: "BANKER",
             bankerBalance: 0
         });
@@ -97,7 +96,7 @@ contract CoinFlipping is AccountsManager{
     }
     
     modifier endedGame{
-        require(currentGame.ongoing == 2, "Failed! Game already ended!");
+        require(currentGame.ongoing == 2, "Failed! Game not ended yet!");
         _;
     }
     
@@ -126,8 +125,15 @@ contract CoinFlipping is AccountsManager{
     
     /** public **/
     
-    function withdrawByBanker(uint amount) public payable{
-        require(msg.sender == banker.bankerAddr, "Failed! You are not banker!");
+    function getPlayers() public view returns(address payable, address payable, string memory, string memory){
+        return(players[0], players[1], accounts[players[0]].username, accounts[players[1]].username);
+    }
+    
+    function queryByBanker() public view beBanker returns(string memory, uint){
+        return(banker.bankerName, banker.bankerBalance);
+    }
+    
+    function withdrawByBanker(uint amount) public payable beBanker{
         require(banker.bankerBalance >= amount, "Failed! You have not enough balance!");
         banker.bankerAddr.transfer(amount);
         banker.bankerBalance -= amount;
@@ -167,20 +173,17 @@ contract CoinFlipping is AccountsManager{
         currentGame.gameBalance += currentGame.bet * currentGame.currentPlayers;
     }
     
-    function checkWinner() public overDue twoPlayers returns (string memory winnerName){
-        currentGame.ongoing = 2; // game ends.
+    
+    function checkWinner() public overDue twoPlayers beBanker{
         
-        // already checked, return result
-        if (currentGame.winnerAddr == banker.bankerAddr){
-            return "All cheated! No Winner!";
+        if (currentGame.ongoing == 2){
+            return;
         }
-        if (currentGame.winnerAddr != address(0)){
-            return accounts[currentGame.winnerAddr].username;
-        }
+        currentGame.ongoing = 2; // game ends.
         
         // check cheaters
         for (uint i = 0; i < currentGame.currentPlayers; i++){
-            if (mapPlayers[players[i]].hashNumber == sha256(abi.encodePacked(mapPlayers[players[i]].number))){
+            if (mapPlayers[players[i]].hashNumber == keccak256(abi.encodePacked(mapPlayers[players[i]].number))){
                 honestPlayers.push(players[i]);
             }
         }
@@ -210,15 +213,35 @@ contract CoinFlipping is AccountsManager{
             }
             currentGame.gameBalance = 0;
         }
-        return accounts[currentGame.winnerAddr].username;
+        currentGame.winnerName = accounts[currentGame.winnerAddr].username;
     }
     
-     function clear() public endedGame beBanker{
+    function getWinner() public view endedGame returns (string memory _winnerName){
+        // already checked, return result
+        if (currentGame.winnerAddr == banker.bankerAddr){
+            return "All cheated! No Winner!";
+        }
+        if (currentGame.winnerAddr != address(0)){
+            return currentGame.winnerName;
+        }
+        return "Not checked yet!";
+    }
+    
+    function playerGetWinner() public view endedGame returns(bool){
+        if (currentGame.winnerAddr == msg.sender){
+            return true;
+        }
+        return false;
+    }
+    
+    function clear() public endedGame beBanker{
         // record the game to history and clear 
         gameHistory.push(GameHistory({
             gameID: currentGameID,
-            players: players,
-            playerNames: [accounts[players[0]].username, accounts[players[1]].username],
+            player1: players[0],
+            player2: players[1],
+            playerName1: accounts[players[0]].username,
+            playerName2: accounts[players[1]].username,
             start_time: currentGame.start_time,
             end_time: currentGame.end_time,
             winnerAddr: currentGame.winnerAddr,
@@ -231,9 +254,28 @@ contract CoinFlipping is AccountsManager{
         currentGameID += 1;
     }
     
-    function checkHistory() public validUser {
-        // check the game history
-        emit Logger2(gameHistory);
+    function bankerCheckHistory() public beBanker returns(GameHistory[] memory){
+        return gameHistory;
+    }
+    
+    function playerCheckHistory() public view validUser returns(GameHistory memory){
+        uint len = gameHistory.length;
+        for (uint i = 0; i < len; i++){
+            if(gameHistory[len-i-1].player1 == msg.sender || gameHistory[len-i-1].player2 == msg.sender){
+                return (gameHistory[len-i-1]);
+            }
+        }
+        return GameHistory({
+            gameID: 0,
+            player1: address(0),
+            player2: address(0),
+            playerName1: "",
+            playerName2: "",
+            start_time: 0,
+            end_time:0,
+            winnerAddr: address(0),
+            winnerName: ""
+        });
     }
     
     function whoAmI() public view returns(uint){
@@ -246,7 +288,7 @@ contract CoinFlipping is AccountsManager{
         }
         return 0;
     }
-
+    
     /** private **/
     
     function clearGame() private notOngoingGame {

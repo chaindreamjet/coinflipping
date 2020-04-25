@@ -2,72 +2,74 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Coin Flipping Game</title>
-    <link rel="stylesheet" href="./index.css">
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <div id="content">
         <h1 id="title">Coin Flipping!</h1>
-        <h2>BANKER MONITER</h2>
-        <h3 id="info"></h3>
-        <div id="query", style="margin: 8px;">
+        <div style="margin: 8px;">
             <div style="margin: 8px;">
-                <label id="username">Banker **</label>
-                <label>, Welcome! </label>
+                <strong><span id="username"></span></strong>
+                <span>, Welcome! </span>
             </div>
 
             <div style="margin: 8px;">
-                <label>Your Current Balance: </label>
-                <label id="balance">0</label>
+                <span>Your Current Balance: </span>
+                <strong><span id="balance"></span></strong>
+            </div>
+
+            <div style="margin: 8px;">
+                <input type="text" id="withdrawNum" value="0">
+                <span> eth</span>
+                <button id="withdrawBtn"> Withdraw</button>
             </div>
         </div>
 
         <div style="margin: 8px;">
+            <h2>PLAYER MONITOR</h2>
             <div style="margin: 8px;">
                 <label>Player List</label> 
-                <button id="updatePlayers"> Update</button>
+                <button id="update"> Update</button>
                 <table border="1">
                     <tr>
                         <th>Username</th>
                         <th>Address</th>
                     </tr>
                     <tr>
-                        <td>row 1, cell 1</td>
-                        <td>row 1, cell 2</td>
+                        <td id="username1"></td>
+                        <td id="address1"></td>
                     </tr>
                     <tr>
-                        <td>row 2, cell 1</td>
-                        <td>row 2, cell 2</td>
+                        <td id="username2"></td>
+                        <td id="address2"></td>
                     </tr>
                 </table>
             </div>
-        </div>
 
-        <div style="margin: 8px;">
-            <div>
-                <button id="startGame" style="margin: 8px;">START GAME</button>
+            <div style="margin: 8px;">
+                <div>
+                    <button id="startGame">START GAME</button>
+                    <span id="gameState"></span>
+                </div>
             </div>
 
-            <div>
-                <label>Time Limit: </label>
-                <label id='timeLimit'>59</label>
-                <label> senconds!</label>
+            <div style="margin: 8px;">
+                <button id="checkWinner"> Check Winner</button>
+                <strong><span id="winner">Winner</span></strong>
+            </div>
+
+            <div style="margin: 8px;">
+                <button id="reset">Reset Game</button>
+                <span id="resetState">Cannot Reset</span>
             </div>
         </div>
 
         <div style="margin: 8px;">
-            <button id="checkWinner"> Check Winner</button>
-            <label id="winner"> Alice </label>
-        </div>
-
-        <div style="margin: 8px;">
-            <button id="reset">Reset Game</button>
-            <label id="resetState">Reset Success!</label>
-        </div>
-
-        <div style="margin: 8px;">
+            <h2>HISTORY MONITOR</h2>
             <button id="bankerCheckGameHistory">Check Game History</button>
             <table id="gameHistory" border="1">
                 <tr>
@@ -81,14 +83,12 @@
             </table>
         </div>
     </div>
-<!-- link jquery -->
-<!-- <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script> -->
-<!-- <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> -->
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-
-<!-- link web3.js -->
-<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
-<!-- link app.js -->
-<script src="./js/app.js"></script>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/web3.min.js"></script>
+    <script src="js/truffle-contract.js"></script>
+    <script src="js/banker.js"></script>
 </body>
 </html>

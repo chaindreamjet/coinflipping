@@ -27,11 +27,6 @@ contract AccountsManager {
     
     /*** constructor ? ***/
     
-    /*** events ***/
-    // store the tranfer records
-    // event Logger(address afrom, address ato, string ufrom, string uto, uint amount, uint time);
-    event Logger(Record[] records);
-    
     /*** modifiers ***/
     modifier validUser{
         require(accounts[msg.sender].valid, "Failed! You have not signed up!");
@@ -89,6 +84,7 @@ contract AccountsManager {
          * requirements:
          *  current user valid
          */
+        uint amount = 
         accounts[msg.sender].balance += msg.value;
     }
     
@@ -155,8 +151,8 @@ contract AccountsManager {
             }));
     }
     
-    function checkRecords() public validUser {
-        emit Logger(records);
+    function checkRecords() public validUser returns(Record[] memory){
+        return records;
     }
     
 }

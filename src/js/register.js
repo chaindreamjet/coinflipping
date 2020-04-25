@@ -86,7 +86,7 @@ App = {
         }
         else{
           console.log("You have not registered!");
-          $("#address").attr("value", web3.currentProvider.selectedAddress);
+          $("#address").val(web3.currentProvider.selectedAddress);
         }
       }).catch(function (error) {
         console.log(error.message);
