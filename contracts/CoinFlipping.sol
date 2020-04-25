@@ -152,12 +152,10 @@ contract CoinFlipping is AccountsManager{
     }
     
     function sendHash(bytes32 hashNumber) public ongoingGame beforeDue twoPlayers bePlayer{
-        require(mapPlayers[msg.sender].hashNumber == 0, "Failed! You have already sent it!");
         mapPlayers[msg.sender].hashNumber = hashNumber;
     }
     
     function sendNumber(uint number) public ongoingGame overDue twoPlayers bePlayer{
-        require(mapPlayers[msg.sender].number == 0, "Failed! You have already sent it!");
         mapPlayers[msg.sender].number = number;
     }
     
@@ -216,24 +214,6 @@ contract CoinFlipping is AccountsManager{
         currentGame.winnerName = accounts[currentGame.winnerAddr].username;
     }
     
-    function getWinner() public view endedGame returns (string memory _winnerName){
-        // already checked, return result
-        if (currentGame.winnerAddr == banker.bankerAddr){
-            return "All cheated! No Winner!";
-        }
-        if (currentGame.winnerAddr != address(0)){
-            return currentGame.winnerName;
-        }
-        return "Not checked yet!";
-    }
-    
-    function playerGetWinner() public view endedGame returns(bool){
-        if (currentGame.winnerAddr == msg.sender){
-            return true;
-        }
-        return false;
-    }
-    
     function clear() public endedGame beBanker{
         // record the game to history and clear 
         gameHistory.push(GameHistory({
@@ -253,8 +233,28 @@ contract CoinFlipping is AccountsManager{
         clearGame();
         currentGameID += 1;
     }
+
+    /** view **/
+
+    function playerGetWinner() public view endedGame returns(bool){
+        if (currentGame.winnerAddr == msg.sender){
+            return true;
+        }
+        return false;
+    }
+
+    function getWinner() public view endedGame returns (string memory){
+        // already checked, return result
+        if (currentGame.winnerAddr == banker.bankerAddr){
+            return "All cheated! No Winner!";
+        }
+        if (currentGame.winnerAddr != address(0)){
+            return currentGame.winnerName;
+        }
+        return "Not checked yet!";
+    }
     
-    function bankerCheckHistory() public beBanker returns(GameHistory[] memory){
+    function bankerCheckHistory() public view beBanker returns(GameHistory[] memory){
         return gameHistory;
     }
     

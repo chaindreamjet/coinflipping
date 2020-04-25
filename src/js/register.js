@@ -54,7 +54,7 @@ App = {
       var account = accounts[0];
       App.contracts.CoinFlipping.deployed().then(function(instance) {
         coinFlippingInstance = instance;
-        return coinFlippingInstance.create(username, address, {from: account, gas: 30000000});
+        return coinFlippingInstance.create(username, address, {from: account});
       }).then(function(result) {
         alert('Register Successful!');
         window.location.href = "player.html";

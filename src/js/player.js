@@ -117,7 +117,7 @@ App = {
             }).then(function (result) {
                 var balance = ((result[1].c[0] * 1e14 + result[1].c[0]) / App.oneEther).toFixed(2);
                 $("#balance").text(balance);
-                $("#depositNum").val(0);
+                $("#depositNum").val("");
             }).catch(function (err) {
                 console.log(err.message);
             });
@@ -145,7 +145,7 @@ App = {
             }).then(function (result) {
                 var balance = ((result[1].c[0] * 1e14 + result[1].c[0]) / App.oneEther).toFixed(2);
                 $("#balance").text(balance);
-                $("#withdrawNum").val(0);
+                $("#withdrawNum").val("");
             }).catch(function (err) {
                 console.log(err.message);
             });
@@ -174,7 +174,7 @@ App = {
             }).then(function (result) {
                 var balance = ((result[1].c[0] * 1e14 + result[1].c[0]) / App.oneEther).toFixed(2);
                 $("#balance").text(balance);
-                $("#transferNum1").val(0);
+                $("#transferNum1").val("");
                 $("#toName").val("");
             }).catch(function (err) {
                 console.log(err.message);
@@ -204,7 +204,7 @@ App = {
             }).then(function (result) {
                 var balance = ((result[1].c[0] * 1e14 + result[1].c[0]) / App.oneEther).toFixed(2);
                 $("#balance").text(balance);
-                $("#transferNum2").val(0);
+                $("#transferNum2").val("");
                 $("#toAddress").val("");
             }).catch(function (err) {
                 console.log(err.message);
