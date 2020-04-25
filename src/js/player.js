@@ -137,7 +137,6 @@ App = {
             var account = accounts[0];
             App.contracts.CoinFlipping.deployed().then(function(instance) {
                 coinFlippingInstance = instance;
-                console.log(amount);
                 return coinFlippingInstance.withdraw(amount, {from: account});
             }).then(function(result) {
                 alert('Withdraw Successful!');
@@ -343,9 +342,24 @@ App = {
 
             App.contracts.CoinFlipping.deployed().then(function (instance) {
                 coinFlippingInstance = instance;
-                return coinFlippingInstance.checkRecords({from: account});
-            }).then(function (result) {
-                console.log(result);
+                return coinFlippingInstance.getRecordIDs.call({from: account});
+            }).then(function (IDs) {
+                for(i = 0; i < IDs.length; i++){
+                    coinFlippingInstance.checkRecords.call(IDs[i].c[0], {from: account}).then(function (result) {
+                        var ref = document.getElementById("checkTransferHistoryBody");
+                        var newRow = ref.insertRow(ref.rows.length);
+                        for(j = 0; j < 3; j++) {
+                            var newCell = newRow.insertCell(j);
+                            if(j===2){
+                                var newText = document.createTextNode(result[j] / App.oneEther);
+                            }
+                            else{
+                                var newText = document.createTextNode(result[j]);
+                            }
+                            newCell.appendChild(newText);
+                        }
+                    })
+                }
             }).catch(function (err) {
                 console.log(err.message);
             });
@@ -366,7 +380,10 @@ App = {
 
             App.contracts.CoinFlipping.deployed().then(function (instance) {
                 coinFlippingInstance = instance;
-                return coinFlippingInstance.playerCheckHistory.call({from: account});
+                return coinFlippingInstance.getGameIDs.call({from: account});
+            }).then(function (IDs) {
+                var lastID = IDs[IDs.length - 1];
+                return coinFlippingInstance.checkHistory.call(lastID.c[0], {from: account});
             }).then(function (result) {
                 $("#gameID").text(result[0].c[0]);
                 $("#player1").text(result[1]);

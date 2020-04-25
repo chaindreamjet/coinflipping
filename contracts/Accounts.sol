@@ -10,14 +10,15 @@ contract AccountsManager {
         uint balance;
         bool valid; // valid or existed user
         uint[] myRecords; // his/her own transfer records
+        uint[] myGames; // games involving him/her
     }
-
+    
     struct Record {
         address afrom;
         address ato;
         string ufrom;
         string uto;
-        int amount;
+        uint amount;
         uint time;
     }
 
@@ -79,10 +80,10 @@ contract AccountsManager {
          * requirements:
          *  current user valid
          */
-        uint amount = accounts[msg.sender].balance += msg.value;
+        accounts[msg.sender].balance += msg.value;
 
         // log
-        log(msg.sender, address(0), "external wallet", accounts[msg.sender].username, amount, now);
+        log(msg.sender, address(0), "external wallet", accounts[msg.sender].username, msg.value, now);
     }
 
     function withdraw(uint amount) public payable validUser enoughBalance(amount){
@@ -147,8 +148,12 @@ contract AccountsManager {
         return (accounts[msg.sender].username, accounts[msg.sender].balance);
     }
 
-    function checkRecords(uint i) public view validUser returns(string memory, string memory, int, uint){
-        return (records[i].ufrom, records[i].uto, records[i].amount, records[i].time);
+    function getRecordIDs() public view returns(uint[] memory) {
+        return accounts[msg.sender].myRecords;
+    }
+
+    function checkRecords(uint i) public view returns(uint, string memory, string memory, uint, uint){
+        return (i, records[i].ufrom, records[i].uto, records[i].amount, records[i].time);
     }
 
     /** private **/
@@ -159,7 +164,7 @@ contract AccountsManager {
             ato: _ato,
             ufrom: _ufrom,
             uto: _uto,
-            amount: int(_amount),
+            amount: _amount,
             time: _time
         });
         accounts[_afrom].myRecords.push(currentRecordID);
@@ -173,5 +178,5 @@ contract AccountsManager {
             }
         }
     }
-    
+
 }

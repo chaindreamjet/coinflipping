@@ -77,32 +77,10 @@
         </div>
 
         <div style="margin: 8px;">
+            <h2>GAME</h2>
             <div style="margin: 8px;">
-                <h2>GAME</h2>
-                <div style="margin: 8px;">
-                    <button id="joinGame">JOIN GAME</button>
-                    <span id='joinState'>Join State</span>
-                </div>
-
-                <div style="margin: 8px;">
-                    <div>
-                        <span>You must send the hash of your number </span>
-                        <strong><span>in</span></strong>
-                        <span> 1 minute,</span>
-                    </div>
-                    <div>
-                        <span>and send the corresponding number </span>
-                        <strong><span>after</span></strong>
-                        <span> 1 minute.</span>
-                    </div>
-                    <div>
-                        <span>Warning: If you do</span>
-                        <strong><span> not </span></strong>
-                        <span>send the corresponding number, you will </span>
-                        <strong><span>not</span></strong>
-                        <span> get your bet back.</span>
-                    </div>
-                </div>
+                <button id="joinGame">JOIN GAME</button>
+                <span id='joinState'>Flip!</span>
             </div>
 
             <div style="margin: 8px;">
@@ -110,14 +88,33 @@
             </div>
 
             <div style="margin: 8px;">
-                <div style="margin: 8px;">
-                    <input type="text", id="hashValue">
+                <div style="margin: 4px;">
+                    <input type="text" id="hashValue">
                     <button id="sendHash"> Send Hash</button>
+                    <div>
+                        <span>You must send the hash of your number </span>
+                        <strong><span>in</span></strong>
+                        <span> 1 minute,</span>
+                    </div>
                 </div>
 
-                <div style="margin: 8px;">
-                    <input type="text", id="numValue">
+                <div style="margin: 4px;">
+                    <input type="text" id="numValue">
                     <button id="sendNumber"> Send Number</button>
+                    <div>
+                        <span>and send the corresponding number </span>
+                        <strong><span>after</span></strong>
+                        <span> 1 minute.</span>
+                    </div>
+                </div>
+
+                <div>
+                    <strong><span>Warning:</span></strong>
+                    <span> If you do</span>
+                    <strong><span> not </span></strong>
+                    <span>send the corresponding number, you will </span>
+                    <strong><span>not</span></strong>
+                    <span> get your bet back.</span>
                 </div>
             </div>
 
@@ -131,19 +128,28 @@
             <div style="margin: 8px;">
                 <h2>CHECK</h2>
                 <button id="checkTransferHistory">Check Transfer History</button>
+                <span>You can check all your deposit, withdraw and transfer transactions</span>
                 <table id="transferHistory", border="1">
-                    <tr>
-                        <th>To</th>
-                        <th>Amount</th>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Amount/eth</th>
+                        </tr>
+                    </thead>
+                    <tbody id="checkTransferHistoryBody">
+                        <tr>
+
+                        </tr>
+                    </tbody>
                 </table>
             </div>
 
             <div style="margin: 8px;">
                 <button id="playerCheckGameHistory">Check Game History</button>
+                <span>You can only check the last game</span>
                 <table id="gameHistory" border="1">
                     <tr>
-                        <th>game ID</th>
                         <th>player 1</th>
                         <th>player 2</th>
                         <th>start time</th>
@@ -151,7 +157,6 @@
                         <th>winner</th>
                     </tr>
                     <tr>
-                        <td id="gameID"></td>
                         <td id="player1"></td>
                         <td id="player2"></td>
                         <td id="startTime"></td>

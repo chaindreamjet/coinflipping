@@ -246,7 +246,43 @@ App = {
     },
 
     bankerCheckGameHistory: function (event) {
+        event.preventDefault();
+        var coinFlippingInstance;
 
+        web3.eth.getAccounts(function (error, accounts) {
+            if(error){
+                console.log(error);
+            }
+
+            var account = accounts[0];
+
+            App.contracts.CoinFlipping.deployed().then(function (instance) {
+                coinFlippingInstance = instance;
+                return coinFlippingInstance.getGameIDs.call({from: account});
+            }).then(function (IDs) {
+                console.log(IDs);
+                for(i = 0; i < IDs.length; i++){
+                    coinFlippingInstance.checkHistory.call(IDs[i].c[0], {from: account}).then(function (result) {
+                        var ref = document.getElementById("gameHistoryBody");
+                        var newRow = ref.insertRow(ref.rows.length);
+                        var newCell0 = newRow.insertCell(0);
+                        for(j = 0; j < 6; j++) {
+                            var newCell = newRow.insertCell(j);
+                            if(j===3 || j===4){
+                                var time = new Date(result[j].c[0] * 1000);
+                                var newText = document.createTextNode(time);
+                            }
+                            else{
+                                var newText = document.createTextNode(result[j]);
+                            }
+                            newCell.appendChild(newText);
+                        }
+                    })
+                }
+            }).catch(function (err) {
+                console.log(err.message);
+            });
+        });
     }
 
 };
