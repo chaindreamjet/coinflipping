@@ -141,7 +141,8 @@ App = {
             var account = accounts[0];
             App.contracts.CoinFlipping.deployed().then(function(instance) {
                 coinFlippingInstance = instance;
-                return coinFlippingInstance.withdraw(amount, {from: account});
+                console.log(amount);
+                return coinFlippingInstance.withdrawByBanker(amount, {from: account});
             }).then(function() {
                 alert('Withdraw Successful!');
                 return coinFlippingInstance.query.call({from: account});

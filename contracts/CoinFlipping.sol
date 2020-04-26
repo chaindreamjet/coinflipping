@@ -253,7 +253,7 @@ contract CoinFlipping is AccountsManager{
         return(currentGame.ongoing == 1);
     }
 
-    function getPlayers() public view returns(address payable, address payable, string memory, string memory){
+    function getPlayers() public view beBanker returns(address payable, address payable, string memory, string memory){
         /* banker get the current in-game players
          * return:
          *  player1: address
