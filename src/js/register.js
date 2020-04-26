@@ -22,8 +22,7 @@ App = {
   initContract: function() {
     $.getJSON('CoinFlipping.json', function(data) {
       // Get the necessary contract artifact file and instantiate it with truffle-contract.
-      var CoinFlippingArtifact = data;
-      App.contracts.CoinFlipping = TruffleContract(CoinFlippingArtifact);
+      App.contracts.CoinFlipping = TruffleContract(data);
 
       // Set the provider for our contract.
       App.contracts.CoinFlipping.setProvider(App.web3Provider);
@@ -55,7 +54,7 @@ App = {
       App.contracts.CoinFlipping.deployed().then(function(instance) {
         coinFlippingInstance = instance;
         return coinFlippingInstance.create(username, address, {from: account});
-      }).then(function(result) {
+      }).then(function() {
         alert('Register Successful!');
         window.location.href = "player.html";
       }).catch(function(err) {
@@ -77,15 +76,12 @@ App = {
       }).then(function (result) {
         var resultNum = result.c[0];
         if(resultNum === 1){
-          console.log("You are a player!");
           window.location.href = "player.html";
         }
         else if(resultNum === 2){
           window.location.href = "banker.html";
-          console.log("You are the banker!");
         }
         else{
-          console.log("You have not registered!");
           $("#address").val(web3.currentProvider.selectedAddress);
         }
       }).catch(function (error) {

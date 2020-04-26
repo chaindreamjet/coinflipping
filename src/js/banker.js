@@ -23,8 +23,7 @@ App = {
     initContract: function() {
         $.getJSON('CoinFlipping.json', function(data) {
             // Get the necessary contract artifact file and instantiate it with truffle-contract.
-            var CoinFlippingArtifact = data;
-            App.contracts.CoinFlipping = TruffleContract(CoinFlippingArtifact);
+            App.contracts.CoinFlipping = TruffleContract(data);
 
             // Set the provider for our contract.
             App.contracts.CoinFlipping.setProvider(App.web3Provider);
@@ -116,8 +115,8 @@ App = {
                 coinFlippingInstance = instance;
                 return coinFlippingInstance.getPlayers({from: account});
             }).then(function (result) {
-                var address1 = result[0]==="0x0000000000000000000000000000000000000000" ? "null" : result[0][0];
-                var address2 = result[1]==="0x0000000000000000000000000000000000000000" ? "null" : result[0][1];
+                var address1 = result[0]==="0x0000000000000000000000000000000000000000" ? "null" : result[0];
+                var address2 = result[1]==="0x0000000000000000000000000000000000000000" ? "null" : result[1];
                 $("#username1").text(result[2]);
                 $("#username2").text(result[3]);
                 $("#address1").text(address1);
@@ -143,7 +142,7 @@ App = {
             App.contracts.CoinFlipping.deployed().then(function(instance) {
                 coinFlippingInstance = instance;
                 return coinFlippingInstance.withdraw(amount, {from: account});
-            }).then(function(result) {
+            }).then(function() {
                 alert('Withdraw Successful!');
                 return coinFlippingInstance.query.call({from: account});
             }).then(function (result) {
@@ -171,17 +170,17 @@ App = {
             App.contracts.CoinFlipping.deployed().then(function (instance) {
                 coinFlippingInstance = instance;
                 return coinFlippingInstance.startGame({from: account});
-            }).then(function (result) {
+            }).then(function () {
                 alert("Start Successful!");
-                $("#gameState").text(" seconds left! Game Ongoing...");
+                $("#gameState").text("You can check the winner 1 minute later");
                 $("#startGame").attr("disabled", true);
                 var limit = 60;
                 var set = setInterval(function () {
-                    $("#startGame").val(--limit);
+                    $("#startGame").html(--limit);
                 }, 1000);
                 setTimeout(function () {
-                    $("#startGame").attr("disabled", false).val("START GAME");
-                    $("gameState").text("Game Not ongoing");
+                    $("#startGame").attr("disabled", false);
+                    $("#gameState").text("Game Not ongoing");
                     clearInterval(set);
                 }, 60000);
             }).catch(function (err) {
@@ -205,7 +204,7 @@ App = {
             App.contracts.CoinFlipping.deployed().then(function (instance) {
                 coinFlippingInstance = instance;
                 return coinFlippingInstance.checkWinner({from: account});
-            }).then(function (result) {
+            }).then(function () {
                 return coinFlippingInstance.getWinner.call({from: account});
             }).then(function (winner) {
                 $("#winner").text(winner);
@@ -232,7 +231,7 @@ App = {
             App.contracts.CoinFlipping.deployed().then(function (instance) {
                 coinFlippingInstance = instance;
                 return coinFlippingInstance.clear({from: account});
-            }).then(function (winner) {
+            }).then(function () {
                 alert("Reset Successful!");
                 return $(window).load();
             }).then(function () {
@@ -260,20 +259,22 @@ App = {
                 coinFlippingInstance = instance;
                 return coinFlippingInstance.getGameIDs.call({from: account});
             }).then(function (IDs) {
-                console.log(IDs);
+                $("#gameHistory  tr:not(:first)").empty("");
                 for(i = 0; i < IDs.length; i++){
                     coinFlippingInstance.checkHistory.call(IDs[i].c[0], {from: account}).then(function (result) {
                         var ref = document.getElementById("gameHistoryBody");
                         var newRow = ref.insertRow(ref.rows.length);
-                        var newCell0 = newRow.insertCell(0);
-                        for(j = 0; j < 6; j++) {
+                        for(j = 0; j < 7; j++) {
                             var newCell = newRow.insertCell(j);
-                            if(j===3 || j===4){
-                                var time = new Date(result[j].c[0] * 1000);
-                                var newText = document.createTextNode(time);
+                            var newText;
+                            if(j===5){
+                                newText = document.createTextNode(App.toDateTime(result[5].c[0] * 1000));
+                            }
+                            else if(j===6){
+                                newText = document.createTextNode(result[6] === "" ? "No Winner" : result[6]);
                             }
                             else{
-                                var newText = document.createTextNode(result[j]);
+                                newText = document.createTextNode(result[j]);
                             }
                             newCell.appendChild(newText);
                         }
@@ -283,8 +284,18 @@ App = {
                 console.log(err.message);
             });
         });
-    }
+    },
 
+    toDateTime: function (raw) {
+        var rawDate = new Date(raw);
+        var year = rawDate.getFullYear();
+        var month = rawDate.getMonth() < 9 ? "0" + (rawDate.getMonth()+1) : rawDate.getMonth() + 1;
+        var date = rawDate.getDate() < 10 ? "0" + (rawDate.getDate()) : rawDate.getDate();
+        var hour = rawDate.getHours() < 10 ? "0" + (rawDate.getHours()) : rawDate.getHours();
+        var minute = rawDate.getMinutes() < 10 ? "0" + (rawDate.getMinutes()) : rawDate.getMinutes();
+        var second = rawDate.getSeconds() < 10 ? "0" + (rawDate.getSeconds()) : rawDate.getSeconds();
+        return year + '-' + month + '-' + date + ',' + hour + ':' + minute + ':' + second;
+    }
 };
 
 $(function() {

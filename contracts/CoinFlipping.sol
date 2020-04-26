@@ -31,12 +31,14 @@ contract CoinFlipping is AccountsManager{
         address payable player2;
         string playerName1;
         string playerName2;
+        uint number1;
+        uint number2;
         uint start_time;
         uint end_time;
         address payable winnerAddr;
         string winnerName;
     }
-    
+
     struct Banker{
         // banker's state
         address payable bankerAddr;
@@ -124,14 +126,6 @@ contract CoinFlipping is AccountsManager{
 
     /** public **/
 
-    function getPlayers() public view returns(address payable, address payable, string memory, string memory){
-        return(players[0], players[1], accounts[players[0]].username, accounts[players[1]].username);
-    }
-
-    function queryByBanker() public view beBanker returns(string memory, uint){
-        return(banker.bankerName, banker.bankerBalance);
-    }
-
     function withdrawByBanker(uint amount) public payable beBanker{
         require(banker.bankerBalance >= amount, "Failed! You have not enough balance!");
         banker.bankerAddr.transfer(amount);
@@ -140,6 +134,7 @@ contract CoinFlipping is AccountsManager{
 
     function joinGame() public notStartedGame notTwoPlayers{
         require(accounts[msg.sender].balance >= currentGame.bet, "Failed! You have no enough ether");
+        require(!mapPlayers[msg.sender].valid, "Failed! You already joined the game!");
         players[currentGame.currentPlayers] = msg.sender;
         mapPlayers[msg.sender] = Player({
            addr: msg.sender,
@@ -215,13 +210,24 @@ contract CoinFlipping is AccountsManager{
 
     function clear() public endedGame beBanker{
         // record the game to history and clear
-        logGame(currentGameID, players[0], players[1], accounts[players[0]].username, accounts[players[1]].username, currentGame.start_time, currentGame.end_time, currentGame.winnerAddr, accounts[currentGame.winnerAddr].username);
+        logGame(currentGameID, players[0], players[1], accounts[players[0]].username, accounts[players[1]].username, mapPlayers[players[0]].number, mapPlayers[players[1]].number, currentGame.start_time, currentGame.end_time, currentGame.winnerAddr, accounts[currentGame.winnerAddr].username);
 
         clearPlayers();
         clearGame();
     }
 
     /** view **/
+    function getOngoing() public view returns(bool){
+        return(currentGame.ongoing == 1);
+    }
+
+    function getPlayers() public view returns(address payable, address payable, string memory, string memory){
+        return(players[0], players[1], accounts[players[0]].username, accounts[players[1]].username);
+    }
+
+    function queryByBanker() public view beBanker returns(string memory, uint){
+        return(banker.bankerName, banker.bankerBalance);
+    }
 
     function playerGetWinner() public view endedGame returns(bool){
         if (currentGame.winnerAddr == msg.sender){
@@ -248,8 +254,8 @@ contract CoinFlipping is AccountsManager{
         return accounts[msg.sender].myGames;
     }
 
-    function checkHistory(uint i) public view returns(uint, string memory, string memory, uint, uint, string memory){
-        return (i, gameHistory[i].playerName1, gameHistory[i].playerName2, gameHistory[i].start_time, gameHistory[i].end_time, gameHistory[i].winnerName);
+    function checkHistory(uint i) public view returns(uint, string memory, string memory, uint, uint, uint, string memory){
+        return (i, gameHistory[i].playerName1, gameHistory[i].playerName2, gameHistory[i].number1, gameHistory[i].number2, gameHistory[i].start_time, gameHistory[i].winnerName);
     }
 
     function whoAmI() public view returns(uint){
@@ -282,14 +288,14 @@ contract CoinFlipping is AccountsManager{
 
     function clearPlayers() private {
         // clear players' states
-        for (uint i = 1; i < currentGame.currentPlayers; i++){
+        for (uint i = 0; i < 2; i++){
             delete mapPlayers[players[i]];
         }
         delete players;
         delete honestPlayers;
     }
 
-    function logGame(uint _gameID, address payable _player1, address payable _player2, string memory _playerName1, string memory _playerName2, uint _start_time, uint _end_time, address payable _winnerAddr, string memory _winnerName) private {
+    function logGame(uint _gameID, address payable _player1, address payable _player2, string memory _playerName1, string memory _playerName2, uint _number1, uint _number2, uint _start_time, uint _end_time, address payable _winnerAddr, string memory _winnerName) private {
 
         gameHistory[currentGameID] = GameHistory({
             gameID: _gameID,
@@ -297,6 +303,8 @@ contract CoinFlipping is AccountsManager{
             player2: _player2,
             playerName1: _playerName1,
             playerName2: _playerName2,
+            number1: _number1,
+            number2: _number2,
             start_time: _start_time,
             end_time: _end_time,
             winnerAddr: _winnerAddr,

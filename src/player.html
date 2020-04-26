@@ -78,6 +78,7 @@
 
         <div style="margin: 8px;">
             <h2>GAME</h2>
+            <h4>Come and Play it! Bet 1 Ether at One Time and Get 1.9 Ether Back if Win!</h4>
             <div style="margin: 8px;">
                 <button id="joinGame">JOIN GAME</button>
                 <span id='joinState'>Flip!</span>
@@ -85,6 +86,7 @@
 
             <div style="margin: 8px;">
                 <button id="getNumber">GET NUMBER</button>
+                <span id="gameState">Game NOT Ongoing</span>
             </div>
 
             <div style="margin: 8px;">
@@ -92,6 +94,7 @@
                     <input type="text" id="hashValue">
                     <button id="sendHash"> Send Hash</button>
                     <div>
+                        <span>Once the game starts, </span>
                         <span>You must send the hash of your number </span>
                         <strong><span>in</span></strong>
                         <span> 1 minute,</span>
@@ -102,7 +105,7 @@
                     <input type="text" id="numValue">
                     <button id="sendNumber"> Send Number</button>
                     <div>
-                        <span>and send the corresponding number </span>
+                        <span>And send the corresponding number </span>
                         <strong><span>after</span></strong>
                         <span> 1 minute.</span>
                     </div>
@@ -132,9 +135,11 @@
                 <table id="transferHistory", border="1">
                     <thead>
                         <tr>
+                            <th>record ID</th>
                             <th>From</th>
                             <th>To</th>
                             <th>Amount/eth</th>
+                            <th>Time</th>
                         </tr>
                     </thead>
                     <tbody id="checkTransferHistoryBody">
@@ -149,20 +154,28 @@
                 <button id="playerCheckGameHistory">Check Game History</button>
                 <span>You can only check the last game</span>
                 <table id="gameHistory" border="1">
-                    <tr>
-                        <th>player 1</th>
-                        <th>player 2</th>
-                        <th>start time</th>
-                        <th>end time</th>
-                        <th>winner</th>
-                    </tr>
-                    <tr>
-                        <td id="player1"></td>
-                        <td id="player2"></td>
-                        <td id="startTime"></td>
-                        <td id="endTime"></td>
-                        <td id="winner2"></td>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>GameID</th>
+                            <th>Player 1</th>
+                            <th>Player 2</th>
+                            <th>Number 1</th>
+                            <th>Number 2</th>
+                            <th>Start time</th>
+                            <th>Winner</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td id="gameID"></td>
+                            <td id="player1"></td>
+                            <td id="player2"></td>
+                            <td id="number1"></td>
+                            <td id="number2"></td>
+                            <td id="startTime"></td>
+                            <td id="winner2"></td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
