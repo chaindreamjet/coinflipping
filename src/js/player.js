@@ -249,7 +249,6 @@ App = {
                 var limit = 60;
                 var set = setInterval(function () {
                     coinFlippingInstance.getOngoing.call({from: account}).then(function (ongoing) {
-                        console.log(ongoing);
                         if(ongoing){
                             $("#gameState").text(--limit + " seconds left!");
                         }
@@ -269,17 +268,20 @@ App = {
 
     getNumber: function () {
         var numValue;
+        var saltValue;
         var hashValue;
         var pad;
         var encodedNum;
 
         numValue = Math.round(Math.random() * 1e16);
+        saltValue = Math.round(Math.random() * 1e16);
         pad = '0'.repeat(66 - web3.toHex(numValue).length);
-        encodedNum = "0x" + pad + web3.toHex(numValue).slice(2);
+        encodedNum = "0x" + pad + web3.toHex(numValue+saltValue).slice(2);
         hashValue = web3.sha3(encodedNum, {encoding: 'hex'});
 
         $("#numValue").val(numValue);
         $("#hashValue").val(hashValue);
+        $("#saltValue").text(saltValue);
     },
 
     sendHash: function (event) {
@@ -309,7 +311,8 @@ App = {
     sendNumber: function (event) {
         event.preventDefault();
 
-        var numValue = $('#numValue').val();
+        var numValue = parseInt($('#numValue').val());
+        var saltValue = parseInt($("#saltValue").text());
         var coinFlippingInstance;
 
         web3.eth.getAccounts(function (error, accounts) {
@@ -321,9 +324,9 @@ App = {
 
             App.contracts.CoinFlipping.deployed().then(function (instance) {
                 coinFlippingInstance = instance;
-                return coinFlippingInstance.sendNumber(numValue, {from: account});
+                return coinFlippingInstance.sendNumber(numValue, saltValue, {from: account});
             }).then(function () {
-                alert("Send Number Successful!");
+                alert("Send Number And Salt Successful!");
             }).catch(function (err) {
                 console.log(err.message);
             });

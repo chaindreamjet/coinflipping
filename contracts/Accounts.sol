@@ -139,7 +139,7 @@ contract AccountsManager {
 
     function query() public view validUser returns(string memory, uint){
         /* query username and balance for current account
-         * returns:
+         * return:
          *  username: string;
          *  balance: uint;
          * requirements:
@@ -149,16 +149,36 @@ contract AccountsManager {
     }
 
     function getRecordIDs() public view returns(uint[] memory) {
+        /* get his/her own record IDs
+         * return:
+         *  recordIDs: uint[]
+         */
         return accounts[msg.sender].myRecords;
     }
 
     function checkRecords(uint i) public view returns(uint, string memory, string memory, uint, uint){
+        /* get the details of certain record by ID
+         * return:
+         *  from username: string
+         *  to username: string
+         *  amount: uint
+         *  time: uint
+         */
         return (i, records[i].ufrom, records[i].uto, records[i].amount, records[i].time);
     }
 
     /** private **/
 
     function log(address payable _afrom, address payable _ato, string memory _ufrom, string memory _uto, uint _amount, uint _time) internal {
+        /* log current record and delete outdated records
+         * args:
+         *  _afrom: address, from address
+         *  _ato: address, to address
+         *  _ufrom: string, from username
+         *  _uto: string, to username
+         *  _amount: uint, transcation amount
+         *  _time: uint, transcation time
+         */
         records[currentRecordID] = Record({
             afrom: _afrom,
             ato: _ato,
