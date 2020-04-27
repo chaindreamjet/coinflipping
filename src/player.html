@@ -6,182 +6,204 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Coin Flipping Game</title>
     <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+          integrity="sha256-L/W5Wfqfa0sdBNIKN9cG6QA5F2qx4qICmU2VgLruv9Y=" crossorigin="anonymous">
 </head>
 <body>
-    <div id="content">
-        <h1 id="title">Coin Flipping!</h1>
-        <div style="margin: 8px;">
+<div class="container-lg">
+    <div class="col">
+        <div class="row">
+            <div class="col">
+                <div class="row-sm alert alert-info" role="alert">
+                    <h1 id="title">Coin Flipping!</h1>
 
-            <div style="margin: 8px;">
-                <strong><span id="username"></span></strong>
-                <span>, Welcome Back! </span>
-            </div>
-
-            <div style="margin: 8px;">
-                <span>Your Current Balance: </span>
-                <strong><span id="balance">0</span></strong>
-                <span> eth</span>
-            </div>
-        </div>
-
-        <div style="margin: 8px;">
-            <h2>BALANCE MANAGER</h2>
-            <div style="margin: 8px;">
-                <div id="deposit" style="margin: 8px;">
-                    <input type="text" id="depositNum" placeholder="0">
-                    <span> eth</span>
-                    <button id="depositBtn"> Deposit</button>
-                </div>
-
-                <div id="withdraw" style="margin: 8px;">
-                    <input type="text" id="withdrawNum" placeholder="0">
-                    <span> eth</span>
-                    <button id="withdrawBtn"> Withdraw</button>
-                </div>
-            </div>
-
-            <div style="margin: 8px;">
-                <div id="transferByName" style="margin: 6px;">
                     <div>
-                        <span>Transfer Using Name</span>
-                        <button id="transferBtn1">Transfer</button>
+                        <strong><span id="username"></span></strong>
+                        <span>, Welcome Back! </span>
                     </div>
-                    <div style="margin: 4px;">
-                        <span>Amount: </span>
-                        <input type="text" id="transferNum1" placeholder="0">
+
+                    <div>
+                        <span>Your Current Balance: </span>
+                        <strong><span id="balance">0</span></strong>
                         <span> eth</span>
                     </div>
-                    <div style="margin: 4px;">
-                        <span>User:&nbsp&nbsp&nbsp&nbsp&nbsp </span>
-                        <input type="text" id="toName">
-                    </div>
                 </div>
 
-                <div id="transferByAddress" style="margin: 6px;">
+                <div class="row-sm alert alert-info" role="alert">
+                    <h2>BALANCE MANAGER</h2>
                     <div>
-                        <span>Transfer Using Address</span>
-                        <button id="transferBtn2">Transfer</button>
+                        <span>Deposit</span>
+                        <div class="input-group">
+                            <input type="text" id="depositNum"  placeholder="AMOUNT" class="form-control">
+                            <div class="input-group-append">
+                                <span class="input-group-text">ETH</span>
+                                <button id="depositBtn" class="btn btn-info">&nbspDeposit&nbsp</button>
+                            </div>
+                        </div>
+
+                        <span>Withdraw</span>
+                        <div class="input-group">
+                            <input type="text" id="withdrawNum" placeholder="AMOUNT" class="form-control">
+                            <div class="input-group-append">
+                                <span class="input-group-text">ETH</span>
+                                <button id="withdrawBtn" class="btn btn-info">Withdraw</button>
+                            </div>
+                        </div>
                     </div>
-                    <div style="margin: 4px;">
-                        <span>Amount:&nbsp </span>
-                        <input type="text" id="transferNum2" placeholder="0">
-                        <span> eth</span>
-                    </div>
-                    <div style="margin: 4px;">
-                        <span>Address: </span>
-                        <input type="text" id="toAddress">
+
+                    <div>
+                        <div>
+                            <span>Transfer Using Name</span>
+                            <input type="text" id="toName" placeholder="USERNAME" class="form-control">
+                            <div class="input-group">
+                                <input type="text" id="transferNum1" placeholder="AMOUNT" class="form-control">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">ETH</span>
+                                </div>
+                            </div>
+                            <div style="text-align: right">
+                                <button id="transferBtn1" class="btn btn-info">Transfer</button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <span>Transfer Using Address</span>
+                            <input type="text" id="toAddress" placeholder="ADDRESS" class="form-control">
+                            <div class="input-group">
+                                <input type="text" id="transferNum2" placeholder="AMOUNT" class="form-control">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">ETH</span>
+                                </div>
+                            </div>
+                            <div style="text-align: right">
+                                <button id="transferBtn2" class="btn btn-info">Transfer</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <div class="col">
+                <div class="row-sm alert alert-info" role="alert">
+                    <h2>GAME</h2>
+                    <p>Come and Play it! Bet 1 Ether at One Time and Get 1.9 Ether Back if Win!</p>
+                    <span id="joinState">Join Game!</span>
+                    <div class="btn-group-vertical btn-toolbar">
+                        <button id="joinGame" class="btn btn-success btn-lg">JOIN GAME</button>
+                        <button id="getNumber" class="btn btn-info btn-lg">GET NUMBER</button>
+                    </div>
+
+                    <div class="alert alert-warning" role="alert">
+                        <span id="gameState">Game NOT Ongoing</span>
+                    </div>
+
+                    <div>
+                        <div class="input-group">
+                            <input type="text" id="hashValue" class="form-control">
+                            <div class="input-group-append">
+                                <button id="sendHash" class="btn btn-info">Send</button>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-warning" role="alert">
+                            <div>
+                                <span>You must send the hash of your number once started </span>
+                                <strong><span>in</span></strong>
+                                <span> 1 minute,</span>
+                                <span> and send the corresponding number and salt</span>
+                                <strong><span> later.</span></strong>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Number:</span>
+                            </div>
+                            <input type="text" id="numValue" class="form-control">
+
+                            <span class="input-group-text">Salt: </span>
+                            <input type="text" id="saltValue" class="form-control">
+                            <div class="input-group-append">
+                                <button id="sendNumber" class="btn btn-info">Send</button>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-warning" role="alert">
+                            <strong><span >Warning:</span></strong>
+                            <span> If you do</span>
+                            <strong><span> not </span></strong>
+                            <span>send the corresponding number, you will </span>
+                            <strong><span>not</span></strong>
+                            <span> get your bet back.</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button id="checkWinner" class="btn btn-success"> Check Winner</button>
+                        <strong><span id="winner"> You Won/Lose! </span></strong>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
-        <div style="margin: 8px;">
-            <h2>GAME</h2>
-            <h4>Come and Play it! Bet 1 Ether at One Time and Get 1.9 Ether Back if Win!</h4>
-            <div style="margin: 8px;">
-                <button id="joinGame">JOIN GAME</button>
-                <span id='joinState'>Flip!</span>
-            </div>
-
-            <div style="margin: 8px;">
-                <button id="getNumber">GET NUMBER</button>
-                <span id="gameState">Game NOT Ongoing</span>
-            </div>
-
-            <div style="margin: 8px;">
-                <div style="margin: 4px;">
-                    <input type="text" id="hashValue">
-                    <button id="sendHash"> Send Hash</button>
-                    <div>
-                        <span>Once the game starts, </span>
-                        <span>You must send the hash of your number </span>
-                        <strong><span>in</span></strong>
-                        <span> 1 minute,</span>
-                    </div>
-                </div>
-
-                <div style="margin: 4px;">
-                    <input type="text" id="numValue">
-                    <button id="sendNumber"> Send Number And Salt</button>
-                    <span>SALT: </span>
-                    <span id="saltValue"></span>
-                    <div>
-                        <span>And send the corresponding number and salt</span>
-                        <strong><span>after</span></strong>
-                        <span> 1 minute.</span>
-                    </div>
-                </div>
-
-                <div>
-                    <strong><span>Warning:</span></strong>
-                    <span> If you do</span>
-                    <strong><span> not </span></strong>
-                    <span>send the corresponding number, you will </span>
-                    <strong><span>not</span></strong>
-                    <span> get your bet back.</span>
-                </div>
-            </div>
-
-            <div style="margin: 8px;">
-                <button id="checkWinner"> Check Winner</button>
-                <strong><span id="winner"> You Won/Lose! </span></strong>
-            </div>
-        </div>
-
-        <div style="margin: 8px;">
-            <div style="margin: 8px;">
-                <h2>CHECK</h2>
-                <button id="checkTransferHistory">Check Transfer History</button>
+        <div class="row-sm alert alert-info" role="alert">
+            <div>
+                <h2>CHECK TRANSFER</h2>
+                <button id="checkTransferHistory" class="btn btn-info">Check Transfer History</button>
                 <span>You can check all your deposit, withdraw and transfer transactions</span>
-                <table id="transferHistory", border="1">
+                <table id="transferHistory" class="table">
                     <thead>
-                        <tr>
-                            <th>record ID</th>
-                            <th>From</th>
-                            <th>To</th>
-                            <th>Amount/eth</th>
-                            <th>Time</th>
-                        </tr>
+                    <tr>
+                        <th scope="col">Record ID</th>
+                        <th scope="col">From</th>
+                        <th scope="col">To</th>
+                        <th scope="col">Amount/ETH</th>
+                        <th scope="col">Time</th>
+                    </tr>
                     </thead>
                     <tbody id="checkTransferHistoryBody">
-                        <tr>
+                    <tr>
 
-                        </tr>
+                    </tr>
                     </tbody>
                 </table>
             </div>
+        </div>
 
-            <div style="margin: 8px;">
-                <button id="playerCheckGameHistory">Check Game History</button>
+        <div class="row-sm alert alert-info" role="alert">
+            <div>
+                <h2>CHECK GAME</h2>
+                <button id="playerCheckGameHistory" class="btn btn-info">Check Game History</button>
                 <span>You can only check the last game</span>
-                <table id="gameHistory" border="1">
+                <table id="gameHistory" class="table">
                     <thead>
-                        <tr>
-                            <th>GameID</th>
-                            <th>Player 1</th>
-                            <th>Player 2</th>
-                            <th>Number 1</th>
-                            <th>Number 2</th>
-                            <th>Start time</th>
-                            <th>Winner</th>
-                        </tr>
+                    <tr>
+                        <th scope="col">GameID</th>
+                        <th scope="col">Player 1</th>
+                        <th scope="col">Player 2</th>
+                        <th scope="col">Number 1</th>
+                        <th scope="col">Number 2</th>
+                        <th scope="col">Start time</th>
+                        <th scope="col">Winner</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td id="gameID"></td>
-                            <td id="player1"></td>
-                            <td id="player2"></td>
-                            <td id="number1"></td>
-                            <td id="number2"></td>
-                            <td id="startTime"></td>
-                            <td id="winner2"></td>
-                        </tr>
+                    <tr>
+                        <td id="gameID"></td>
+                        <td id="player1"></td>
+                        <td id="player2"></td>
+                        <td id="number1"></td>
+                        <td id="number2"></td>
+                        <td id="startTime"></td>
+                        <td id="winner2"></td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+</div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->

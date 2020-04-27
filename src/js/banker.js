@@ -141,11 +141,10 @@ App = {
             var account = accounts[0];
             App.contracts.CoinFlipping.deployed().then(function(instance) {
                 coinFlippingInstance = instance;
-                console.log(amount);
                 return coinFlippingInstance.withdrawByBanker(amount, {from: account});
             }).then(function() {
                 alert('Withdraw Successful!');
-                return coinFlippingInstance.query.call({from: account});
+                return coinFlippingInstance.queryByBanker.call({from: account});
             }).then(function (result) {
                 var balance = ((result[1].c[0] * 1e14 + result[1].c[0]) / App.oneEther).toFixed(2);
                 $("#balance").text(balance);

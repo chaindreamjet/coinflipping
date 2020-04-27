@@ -281,7 +281,7 @@ App = {
 
         $("#numValue").val(numValue);
         $("#hashValue").val(hashValue);
-        $("#saltValue").text(saltValue);
+        $("#saltValue").val(saltValue);
     },
 
     sendHash: function (event) {
@@ -312,7 +312,7 @@ App = {
         event.preventDefault();
 
         var numValue = parseInt($('#numValue').val());
-        var saltValue = parseInt($("#saltValue").text());
+        var saltValue = parseInt($("#saltValue").val());
         var coinFlippingInstance;
 
         web3.eth.getAccounts(function (error, accounts) {
